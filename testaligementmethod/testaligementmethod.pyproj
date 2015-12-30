@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>4c3c7d86-ee50-4d42-9179-afb1223c818e</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>testaligementmethod.py</StartupFile>
+    <StartupFile>processresult.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
