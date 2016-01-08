@@ -25,17 +25,17 @@ def worker(fname):
         else:
             seqs.append(line.strip())
     file.close()
-    p,f=os.path.split(fname)
-    file = open(os.path.join(p,f[0:8]+'clusterresh-MLS128.csv'))
+    p,f = os.path.split(fname)
+    file = open(os.path.join(p,f[0:8] + 'clusterresh-MLS128.csv'))
     for line in file:
         if line.split('_')[3] == 'IGHV1-78*01':
             ntarget = ntarget + 1
     file.close()
     for i in range(0,len(tags)):
-        ratio=100*int(tags[i].split('_')[0])/ntarget
-        newtag=tags[i].split('_')
+        ratio = 100 * int(tags[i].split('_')[0]) / ntarget
+        newtag = tags[i].split('_')
         newtag.insert(1,str(ratio))
-        tags[i]='_'.join(newtag)
+        tags[i] = '_'.join(newtag)
     seqs = sorted(seqs,key=lambda x:float(tags[seqs.index(x)].split('_')[-1]),reverse=True)
     tags.sort(key=lambda x:float(x.split('_')[-1]),reverse=True)
     filew = open(fname[0:-4] + 'sortbyresemblance.txt','w')
