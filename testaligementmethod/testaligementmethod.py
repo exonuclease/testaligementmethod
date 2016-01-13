@@ -1,6 +1,7 @@
 ﻿from math import log2
 import glob
 from multiprocessing import Process
+import pickle
 def cpsfm(lines):
     n = len(lines)
     psfm = []
@@ -25,13 +26,13 @@ def cprob(seqs,psfm):
         for j in range(0,len(seqs[i])):
             if psfm[j]:
                 if seqs[i][j] in psfm[j]:
-                    prob = prob * psfm[j][seqs[i][j]]
+                    prob = prob * psfm[j][seqs[i][j]] / bg[seqs[i][j]]
                 else:
                     prob = prob * 0.01
         probs.append(prob)
     return probs
 def worker(fname):
-    file = open(r'/home/ldzeng/yfguo/jmzeng-summary/cluster/MLS128/trainset.txt')
+    file = open(r'C:\Users\郭一凡\Documents\Visual Studio 2015\Projects\testaligementmethod\testaligementmethod\trainset.txt')
     trainset = []
     for line in file:
         for i in range(0,2):
@@ -60,7 +61,7 @@ def worker(fname):
     for line in lines:
         seqs.append(line.split(',')[-4])
     probs = cprob(seqs,psfm)
-    file = open(r'/home/ldzeng/yfguo/jmzeng-summary/cluster/MLS128/trainset.txt')
+    file = open(r'C:\Users\郭一凡\Documents\Visual Studio 2015\Projects\testaligementmethod\testaligementmethod\trainset.txt')
     ptrainset = []
     for line in file:
         ptrainset.append(line.strip())
@@ -77,9 +78,13 @@ def worker(fname):
         if probs[i] > cutoff:
             filew.write(lines[i] + ',' + str(probs[i]) + '\n')
     filew.close()
-fnames = glob.glob(r'/home/ldzeng/yfguo/jmzeng-summary/cluster/MLS128/*MLS128.csv')
-pool = []
+fnames = glob.glob(r'C:\Users\郭一凡\Documents\Visual Studio 2015\Projects\testaligementmethod\testaligementmethod\*MLS128.csv')
+bgfile = open(r'C:\Users\郭一凡\Documents\Visual Studio 2015\Projects\testaligementmethod\testaligementmethod\background.pkl','rb')
+bg = pickle.load(bgfile)
+bgfile.close()
 if __name__ == '__main__':
+    pool = []
     for fname in fnames:
         pool.append(Process(target=worker,args=(fname,)))
         pool[-1].start()
+        pool[-1].join()
